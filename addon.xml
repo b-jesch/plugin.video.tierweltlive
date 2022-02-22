@@ -19,7 +19,7 @@
   <platform>all</platform>
   <source>https://github.com/TehTux/plugin.video.tierweltlive</source>
   <assets>
-    <icon>resources\icon.jpg</icon>
+    <icon>resources\icon.png</icon>
     <fanart>resources\fanart.jpg</fanart>
     <screenshot>resources\screen-01.jpg</screenshot>
     <screenshot>resources\screen-02.jpg</screenshot>
