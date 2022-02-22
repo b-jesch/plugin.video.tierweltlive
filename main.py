@@ -1,31 +1,39 @@
 # coding=utf-8
 """Kodi Video Plugin for TIERWELT Live"""
 import sys
-from urllib.parse import urlencode
-from urllib.parse import parse_qsl
+from urllib.parse import urlencode, parse_qsl
 import json
 import re
 from xml.dom import minidom
 import requests
+import xbmc
 import xbmcgui  # pylint: disable=E0401
 import xbmcplugin  # pylint: disable=E0401
 import xbmcaddon  # pylint: disable=E0401
 from dateutil import parser
 
 
+ADDON = xbmcaddon.Addon()
 URL = sys.argv[0]
 HANDLE = int(sys.argv[1])
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)' + \
              ' Chrome/48.0.2564.82 Safari/537.36'
-API_CONFIG = requests.get(
-    "https://twl-prod-static.s3.amazonaws.com/configs/projectConfig_smartclip.json",
-    headers={'USER-AGENT': USER_AGENT}).json()
-API_VERSION = requests.get(
-    API_CONFIG['ivms']['version'], headers={'USER-AGENT': USER_AGENT}).json()['version_name']
-VIDEO_API = API_CONFIG['ivms']['restapi'].replace("[version]", API_VERSION)
-RSS_RESOURCE = requests.get(
-    'https://twl-aggregation.s3.us-east-1.amazonaws.com/livestream.xml',
-    headers={'USER-AGENT': USER_AGENT}).text.encode('utf-8')
+
+try:
+    API_CONFIG = requests.get(
+        "https://twl-prod-static.s3.amazonaws.com/configs/projectConfig_smartclip.json",
+        headers={'USER-AGENT': USER_AGENT}).json()
+    API_VERSION = requests.get(
+        API_CONFIG['ivms']['version'], headers={'USER-AGENT': USER_AGENT}).json()['version_name']
+    VIDEO_API = API_CONFIG['ivms']['restapi'].replace("[version]", API_VERSION)
+    RSS_RESOURCE = requests.get(
+        'https://twl-aggregation.s3.us-east-1.amazonaws.com/livestream.xml',
+        headers={'USER-AGENT': USER_AGENT}).text.encode('utf-8')
+
+except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError) as e:
+    xbmc.log('[%s] %s' % (ADDON.getAddonInfo('name'), str(e)), xbmc.LOGERROR)
+    xbmcgui.Dialog().notification(ADDON.getAddonInfo('name'), 'A Network Error occurred. Try again later.',
+                                  icon=xbmcgui.NOTIFICATION_WARNING)
 
 
 def get_url(**kwargs):
