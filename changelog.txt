@@ -1,0 +1,27 @@
+﻿
+[B]Version 1.1.4+matrix  (05.08.2023)[/B] by realvito
+- fixed: Sämtliche Rubriken lassen sich nicht öffnen und erzeugen interne Fehler (Script komplett überarbeitet)
+- added: Rubrik = Neueste Filme (Abfrage der Rubriken jetzt direkt über die API)
+- optimized: Anpassungen an Änderungen von KODI - Nexus/Omega
+
+[B]Version 1.1.3+matrix  (22.02.2022)[/B] by b-jesch
+- fixed: handle network exceptions
+- optimized: Icon changed
+
+[B]Version 1.1.2+matrix  (07.02.2022)[/B] by b-jesch
+- optimized: add dependency of dateutil module
+
+[B]Version 1.1.1+matrix  (02.01.2022)[/B] by b-jesch
+- fixed: incorrect date of live streams
+- Bump version
+
+[B]Version 1.1.0+matrix  (31.10.2020)[/B] by TehTux
+- optimized: Erste Version für Kodi 19 (Matrix)
+
+[B]Version 1.1.0  (31.10.2020)[/B] by TehTux
+- added: Aktuelle Livestreams vom RSS-Feed hinzugefügt
+
+:::
+
+[B]Version 1.0.0  (21.08.2020)[/B]
+- Initial release by @TehTux
