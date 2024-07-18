@@ -3,6 +3,8 @@
 import sys
 import os
 import re
+
+import simplejson.errors
 import xbmc
 import xbmcgui
 import xbmcplugin
@@ -48,6 +50,7 @@ def get_userAgent(REV='109.0', VER='112.0'):
         return base.format('(Macintosh; Intel Mac OS X 10.15; rv:'+REV+')') # Mac OSX
     return base.format('(X11; Linux x86_64; rv:'+REV+')') # x64 Linux
 
+
 def _header(REFERRER=None):
     header = {'Pragma': 'no-cache', 'Accept': '*/*', 'User-Agent': get_userAgent(), 'DNT': '1',
               'Upgrade-Insecure-Requests': '1', 'Accept-Encoding': 'gzip', 'Accept-Language': 'en-US,en;q=0.8,de;q=0.7'}
@@ -55,16 +58,16 @@ def _header(REFERRER=None):
         header['Referer'] = REFERRER
     return header
 
+
 def getUrl(url, method='GET', REF=BASE_URL, headers=None, cookies=None, allow_redirects=True, verify=True, stream=None, data=None, json=None):
     simple = requests.Session()
     ANSWER = None
     try:
         response = simple.get(url, headers=_header(REF), allow_redirects=allow_redirects, verify=verify, stream=stream, timeout=30)
         ANSWER = response.json() if method in ['GET', 'POST'] else response.text
-        #xbmc.log(f"[{addon_id} v.{addon_version}] === CALLBACK === status : {str(response.status_code)} || url : {response.url} || header : {_header(REF)} ===", xbmc.LOGINFO)
-    except requests.exceptions.RequestException as e:
-        xbmc.log(f"[{addon_id} v.{addon_version}] ERROR - ERROR - ERROR ##### url : {url} === error : {str(e)} #####", xbmc.LOGERROR)
-        dialog.notification(f"ERROR: {addon_id} v.{addon_version} !!!", str(e), icon, 12000)
+    except BaseException as e:
+        xbmc.log(f"[{addon_id} v.{addon_version}] url: {url} === error: {str(e)}", xbmc.LOGERROR)
+        dialog.notification(addon_name, 'No data received for this item!', xbmcgui.NOTIFICATION_ERROR)
         return sys.exit(0)
     return ANSWER
 
